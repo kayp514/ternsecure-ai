@@ -60,7 +60,7 @@ export function AppSidebar() {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarHistory user={user} />
+        <SidebarHistory />
       </SidebarContent>
       <SidebarFooter>{user && <SidebarUserNav />}</SidebarFooter>
     </Sidebar>
