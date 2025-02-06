@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { CodeBlock } from './code-block';
 
 const components: Partial<Components> = {
-  // @ts-expect-error
+  // @ts-expect-error - CodeBlock component has a different type signature than what react-markdown expects
   code: CodeBlock,
   pre: ({ children }) => <>{children}</>,
   ol: ({ node, children, ...props }) => {
@@ -38,7 +38,7 @@ const components: Partial<Components> = {
   },
   a: ({ node, children, ...props }) => {
     return (
-      // @ts-expect-error
+      // @ts-expect-error - Next.js Link component has a different prop type than what react-markdown expects
       <Link
         className="text-blue-500 hover:underline"
         target="_blank"
