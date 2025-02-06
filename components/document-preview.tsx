@@ -137,15 +137,17 @@ const LoadingSkeleton = ({ blockKind }: { blockKind: BlockKind }) => (
   </div>
 );
 
+interface HitboxLayerProps {
+  hitboxRef: React.RefObject<HTMLDivElement | null>;
+  result: any;
+  setBlock: (updaterFn: UIBlock | ((currentBlock: UIBlock) => UIBlock)) => void;
+}
+
 const PureHitboxLayer = ({
   hitboxRef,
   result,
   setBlock,
-}: {
-  hitboxRef: React.RefObject<HTMLDivElement>;
-  result: any;
-  setBlock: (updaterFn: UIBlock | ((currentBlock: UIBlock) => UIBlock)) => void;
-}) => {
+}: HitboxLayerProps) => {
   const handleClick = useCallback(
     (event: MouseEvent<HTMLElement>) => {
       const boundingBox = event.currentTarget.getBoundingClientRect();
