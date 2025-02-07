@@ -31,7 +31,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuPortal,
-  DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -49,13 +48,18 @@ import {
 import type { Chat } from '@prisma/client';
 import { fetcher } from '@/lib/utils';
 import { useChatVisibility } from '@/hooks/use-chat-visibility';
+import type { VisibilityType } from '@/components/visibility-selector';
+
+interface ChatWithVisibility extends Omit<Chat, 'visibility'> {
+  visibility: VisibilityType;
+}
 
 type GroupedChats = {
-  today: Chat[];
-  yesterday: Chat[];
-  lastWeek: Chat[];
-  lastMonth: Chat[];
-  older: Chat[];
+  today: ChatWithVisibility[];
+  yesterday: ChatWithVisibility[];
+  lastWeek: ChatWithVisibility[];
+  lastMonth: ChatWithVisibility[];
+  older: ChatWithVisibility[];
 };
 
 const PureChatItem = ({
@@ -64,7 +68,7 @@ const PureChatItem = ({
   onDelete,
   setOpenMobile,
 }: {
-  chat: Chat;
+  chat: ChatWithVisibility;
   isActive: boolean;
   onDelete: (chatId: string) => void;
   setOpenMobile: (open: boolean) => void;
@@ -158,7 +162,7 @@ export function SidebarHistory() {
     data: history,
     isLoading,
     mutate,
-  } = useSWR<Array<Chat>>(user ? '/api/history' : null, fetcher, {
+  } = useSWR<Array<ChatWithVisibility>>(user ? '/api/history' : null, fetcher, {
     fallbackData: [],
   });
 
@@ -247,7 +251,7 @@ export function SidebarHistory() {
     );
   }
 
-  const groupChatsByDate = (chats: Chat[]): GroupedChats => {
+  const groupChatsByDate = (chats: ChatWithVisibility[]): GroupedChats => {
     const now = new Date();
     const oneWeekAgo = subWeeks(now, 1);
     const oneMonthAgo = subMonths(now, 1);

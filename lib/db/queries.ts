@@ -1,6 +1,6 @@
 //import 'server-only';
 import { prisma } from '../prisma';
-import { BlockKind } from '@/components/block';
+import type { BlockKind } from '@/components/block';
 import type { Message, Suggestion } from '@prisma/client';
 import type { DatabaseUserInput } from './types';
 
@@ -131,7 +131,13 @@ export async function getChatById({ id }: { id: string }) {
 export async function saveMessages({ messages }: { messages: Array<Message> }) {
   try {
     return await prisma.message.createMany({
-      data: messages,
+      data: messages as Array<{
+        id: string;
+        createdAt: Date;
+        content: any;  // or Prisma.JsonValue
+        chatId: string;
+        role: string;
+      }>,
     });
   } catch (error) {
     console.error('Failed to save messages in database', error);

@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import { usePathname } from "next/navigation"
 
 export function AuthHeader() {

@@ -10,7 +10,7 @@ import {
   RedoIcon,
   UndoIcon,
 } from '@/components/icons';
-import { Suggestion } from '@prisma/client';
+import type { Suggestion } from '@prisma/client';
 import { toast } from 'sonner';
 import { getSuggestions } from '../actions';
 
@@ -90,8 +90,7 @@ export const textBlock = new Block<'text', TextBlockMetadata>({
             onSaveContent={onSaveContent}
           />
 
-          {metadata &&
-          metadata.suggestions &&
+          {metadata?.suggestions &&
           metadata.suggestions.length > 0 ? (
             <div className="md:hidden h-dvh w-12 shrink-0" />
           ) : null}

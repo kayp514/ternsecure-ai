@@ -1,18 +1,38 @@
 import type {
   CoreAssistantMessage,
   CoreToolMessage,
+  Message as UIMessage,
+  ToolContent,
   Message,
-  TextStreamPart,
   ToolInvocation,
-  ToolSet,
 } from 'ai';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 import type { Message as DBMessage, Document } from '@prisma/client';
 
+
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
+}
+
+function isToolMessage(message: DBMessage): boolean {
+  if (message.role !== 'tool' || !message.content) return false;
+  
+  const content = message.content as any;
+  return Array.isArray(content) && content.every(item => 
+    item && typeof item === 'object' && 
+    'toolCallId' in item && 
+    'type' in item
+  );
+}
+
+
+function convertToToolMessage(message: DBMessage): CoreToolMessage {
+  return {
+    role: 'tool',
+    content: message.content as unknown as ToolContent,
+  };
 }
 
 interface ApplicationError extends Error {
@@ -87,11 +107,11 @@ function addToolMessageToChat({
 
 export function convertToUIMessages(
   messages: Array<DBMessage>,
-): Array<Message> {
-  return messages.reduce((chatMessages: Array<Message>, message) => {
-    if (message.role === 'tool') {
+): Array<UIMessage> {
+  return messages.reduce((chatMessages: Array<UIMessage>, message) => {
+    if (message.role === 'tool' && isToolMessage(message)) {
       return addToolMessageToChat({
-        toolMessage: message as CoreToolMessage,
+        toolMessage: convertToToolMessage(message),
         messages: chatMessages,
       });
     }

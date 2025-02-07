@@ -1,9 +1,8 @@
-import { ChatRequestOptions, Message } from 'ai';
+import type { ChatRequestOptions, Message } from 'ai';
 import { PreviewMessage, ThinkingMessage } from './message';
 import { useScrollToBottom } from './use-scroll-to-bottom';
-import { Overview } from './overview';
 import { memo } from 'react';
-import { Vote } from '@prisma/client';
+import type { Vote } from '@prisma/client';
 import equal from 'fast-deep-equal';
 
 interface MessagesProps {

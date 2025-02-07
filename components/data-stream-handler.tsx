@@ -2,8 +2,8 @@
 
 import { useChat } from 'ai/react';
 import { useEffect, useRef } from 'react';
-import { blockDefinitions, BlockKind } from './block';
-import { Suggestion } from '@prisma/client';
+import { blockDefinitions, type BlockKind } from './block';
+import type { Suggestion } from '@prisma/client';
 import { initialBlockData, useBlock } from '@/hooks/use-block';
 
 export type DataStreamDelta = {

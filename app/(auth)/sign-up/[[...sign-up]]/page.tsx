@@ -2,7 +2,7 @@
 
 import { SignUp } from '@tern-secure/nextjs'
 import { ternSecureAuth } from '@tern-secure/nextjs'
-import { FirebaseAuthUser } from '@/lib/db/types'
+import type { FirebaseAuthUser } from '@/lib/db/types'
 import { createDatabaseUser } from '../../../(chat)/actions'
 
 

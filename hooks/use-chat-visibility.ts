@@ -1,10 +1,11 @@
 'use client';
 
 import { updateChatVisibility } from '@/app/(chat)/actions';
-import { VisibilityType } from '@/components/visibility-selector';
-import { Chat } from '@prisma/client';
+import type { VisibilityType } from '@/components/visibility-selector';
+import type { Chat } from '@prisma/client';
 import { useMemo } from 'react';
 import useSWR, { useSWRConfig } from 'swr';
+
 
 export function useChatVisibility({
   chatId,

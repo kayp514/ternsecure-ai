@@ -2,16 +2,16 @@
 
 import {
   memo,
-  MouseEvent,
+  type MouseEvent,
   useCallback,
   useEffect,
   useMemo,
   useRef,
 } from 'react';
-import { BlockKind, UIBlock } from './block';
+import type { BlockKind, UIBlock } from './block';
 import { FileIcon, FullscreenIcon, ImageIcon, LoaderIcon } from './icons';
 import { cn, fetcher } from '@/lib/utils';
-import { Document } from '@prisma/client';
+import type { Document } from '@prisma/client';
 import { InlineDocumentSkeleton } from './document-skeleton';
 import useSWR from 'swr';
 import { Editor } from './editor';
@@ -22,11 +22,18 @@ import equal from 'fast-deep-equal';
 import { SpreadsheetEditor } from './sheet-editor';
 import { ImageEditor } from './image-editor';
 
+
 interface DocumentPreviewProps {
   isReadonly: boolean;
   result?: any;
   args?: any;
 }
+
+
+interface DocumentWithBlockKind extends Omit<Document, 'kind'> {
+  kind: BlockKind;
+}
+
 
 export function DocumentPreview({
   isReadonly,
@@ -36,7 +43,7 @@ export function DocumentPreview({
   const { block, setBlock } = useBlock();
 
   const { data: documents, isLoading: isDocumentsFetching } = useSWR<
-    Array<Document>
+    Array<DocumentWithBlockKind>
   >(result ? `/api/document?id=${result.id}` : null, fetcher);
 
   const previewDocument = useMemo(() => documents?.[0], [documents]);
@@ -84,12 +91,12 @@ export function DocumentPreview({
     return <LoadingSkeleton blockKind={result.kind ?? args.kind} />;
   }
 
-  const document: Document | null = previewDocument
+  const document: DocumentWithBlockKind | null = previewDocument
     ? previewDocument
     : block.status === 'streaming'
       ? {
           title: block.title,
-          kind: block.kind,
+          kind: block.kind as BlockKind,
           content: block.content,
           id: block.documentId,
           createdAt: new Date(),
@@ -230,7 +237,7 @@ const DocumentHeader = memo(PureDocumentHeader, (prevProps, nextProps) => {
   return true;
 });
 
-const DocumentContent = ({ document }: { document: Document }) => {
+const DocumentContent = ({ document }: { document: DocumentWithBlockKind }) => {
   const { block } = useBlock();
 
   const containerClassName = cn(

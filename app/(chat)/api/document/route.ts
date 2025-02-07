@@ -1,5 +1,5 @@
 import { auth } from '@tern-secure/nextjs/server';
-import { BlockKind } from '@/components/block';
+import type { BlockKind } from '@/components/block';
 import {
   deleteDocumentsByIdAfterTimestamp,
   getDocumentsById,

@@ -2,11 +2,11 @@ import { codeDocumentHandler } from '@/blocks/code/server';
 import { imageDocumentHandler } from '@/blocks/image/server';
 import { sheetDocumentHandler } from '@/blocks/sheet/server';
 import { textDocumentHandler } from '@/blocks/text/server';
-import { BlockKind } from '@/components/block';
-import { DataStreamWriter } from 'ai';
-import { Document } from '@prisma/client'
+import type { BlockKind } from '@/components/block';
+import type { DataStreamWriter } from 'ai';
+import type { Document } from '@prisma/client'
 import { saveDocument } from '../db/queries';
-import { AuthResult } from '@tern-secure/nextjs/server';
+import type { AuthResult } from '@tern-secure/nextjs/server';
 
 
 export interface SaveDocumentProps {

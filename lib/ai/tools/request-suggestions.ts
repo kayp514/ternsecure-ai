@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { AuthResult } from '@tern-secure/nextjs/server';
-import { DataStreamWriter, streamObject, tool } from 'ai';
+import type { AuthResult } from '@tern-secure/nextjs/server';
+import { type DataStreamWriter, streamObject, tool } from 'ai';
 import { getDocumentById, saveSuggestions } from '@/lib/db/queries';
-import { Suggestion } from '@prisma/client';
+import type { Suggestion } from '@prisma/client';
 import { generateUUID } from '@/lib/utils';
 import { myProvider } from '../models';
 
