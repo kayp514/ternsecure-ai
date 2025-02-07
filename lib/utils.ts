@@ -1,38 +1,18 @@
 import type {
   CoreAssistantMessage,
   CoreToolMessage,
-  Message as UIMessage,
-  ToolContent,
   Message,
+  TextStreamPart,
   ToolInvocation,
+  ToolSet,
 } from 'ai';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
 import type { Message as DBMessage, Document } from '@prisma/client';
 
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
-}
-
-function isToolMessage(message: DBMessage): boolean {
-  if (message.role !== 'tool' || !message.content) return false;
-  
-  const content = message.content as any;
-  return Array.isArray(content) && content.every(item => 
-    item && typeof item === 'object' && 
-    'toolCallId' in item && 
-    'type' in item
-  );
-}
-
-
-function convertToToolMessage(message: DBMessage): CoreToolMessage {
-  return {
-    role: 'tool',
-    content: message.content as unknown as ToolContent,
-  };
 }
 
 interface ApplicationError extends Error {
@@ -105,13 +85,81 @@ function addToolMessageToChat({
   });
 }
 
+function isToolContent(content: any): content is Array<{
+  type: 'tool-result';
+  toolCallId: string;
+  toolName: string;
+  result: string;
+}> {
+  return Array.isArray(content) && content.every(item => 
+    item.type === 'tool-result' &&
+    typeof item.toolCallId === 'string' &&
+    typeof item.toolName === 'string' &&
+    typeof item.result === 'string'
+  );
+}
+
+interface TextContent {
+  type: 'text';
+  text: string;
+}
+
+interface ToolCallContent {
+  type: 'tool-call';
+  toolCallId: string;
+  toolName: string;
+  args: Record<string, unknown>;
+}
+
+interface ReasoningContent {
+  type: 'reasoning';
+  reasoning: string;
+}
+
+function isTextContent(content: unknown): content is TextContent {
+  return typeof content === 'object' 
+    && content !== null 
+    && 'type' in content 
+    && (content as any).type === 'text' 
+    && 'text' in content 
+    && typeof (content as any).text === 'string';
+}
+
+function isToolCallContent(content: unknown): content is ToolCallContent {
+  return typeof content === 'object' 
+    && content !== null 
+    && 'type' in content 
+    && (content as any).type === 'tool-call'
+    && 'toolCallId' in content 
+    && 'toolName' in content 
+    && 'args' in content;
+}
+
+function isReasoningContent(content: unknown): content is ReasoningContent {
+  return typeof content === 'object' 
+    && content !== null 
+    && 'type' in content 
+    && (content as any).type === 'reasoning'
+    && 'reasoning' in content 
+    && typeof (content as any).reasoning === 'string';
+}
+
 export function convertToUIMessages(
   messages: Array<DBMessage>,
-): Array<UIMessage> {
-  return messages.reduce((chatMessages: Array<UIMessage>, message) => {
-    if (message.role === 'tool' && isToolMessage(message)) {
+): Array<Message> {
+  return messages.reduce((chatMessages: Array<Message>, message) => {
+    if (message.role === 'tool') {
+      if (!isToolContent(message.content)) {
+        console.warn('Invalid tool message content structure:', message);
+        return chatMessages;
+      }
+
       return addToolMessageToChat({
-        toolMessage: convertToToolMessage(message),
+        toolMessage: {
+          id: message.id,
+          role: 'tool',
+          content: message.content
+        } as CoreToolMessage,
         messages: chatMessages,
       });
     }
@@ -123,18 +171,18 @@ export function convertToUIMessages(
     if (typeof message.content === 'string') {
       textContent = message.content;
     } else if (Array.isArray(message.content)) {
-      for (const content of message.content) {
-        if (content.type === 'text') {
-          textContent += content.text;
-        } else if (content.type === 'tool-call') {
+      for (const item of message.content) {
+        if (isTextContent(item)) {
+          textContent += item.text;
+        } else if (isToolCallContent(item)) {
           toolInvocations.push({
             state: 'call',
-            toolCallId: content.toolCallId,
-            toolName: content.toolName,
-            args: content.args,
+            toolCallId: item.toolCallId,
+            toolName: item.toolName,
+            args: item.args,
           });
-        } else if (content.type === 'reasoning') {
-          reasoning = content.reasoning;
+        } else if (isReasoningContent(item)) {
+          reasoning = item.reasoning;
         }
       }
     }
