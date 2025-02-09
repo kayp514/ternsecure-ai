@@ -3,18 +3,9 @@ import { ternSecureMiddleware, createRouteMatcher } from '@tern-secure/nextjs/se
 const publicPaths = createRouteMatcher([
     '/sign-in',
     '/sign-up',
-    '/api/auth/*',
-    '/terms',
-    '/privacy',
-  ]) //user can add more public paths here
-
-const protectedPaths = [
-    '/dashboard/*',
-    '/profile',
     '/api/*',
-    '/settings/*',
-    '/admin/*',
-  ] //user can add more protected paths here
+  ])
+
 
 // Configure protected routes
 export const config = {
@@ -27,10 +18,8 @@ export const config = {
   }  //user can add more config here
 
 // Initialize ternSecureMiddleware with custom config and must be edge runtime
-export default ternSecureMiddleware(async (req, request) => {
-    //this will protect all paths except public paths
+export default ternSecureMiddleware(async (auth, request) => {
     if(!publicPaths(request)) {
-        await req.protect()
+        auth.protect()
     }
-
 })

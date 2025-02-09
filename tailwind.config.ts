@@ -6,8 +6,8 @@ const config: Config = {
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
     './app/**/*.{js,ts,jsx,tsx,mdx}',
-    "./node_modules/@tern-secure/**/*.{js,ts,jsx,tsx}",  // Adjust the package name
-    "./node_modules/@tern-secure/*/dist/**/*.{js,ts,jsx,tsx}" // For compiled files
+    './node_modules/@tern-secure/**/*.{js,ts,jsx,tsx}',  // Adjust the package name
+    './node_modules/@tern-secure/*/dist/**/*.{js,ts,jsx,tsx}' // For compiled files
   ],
   theme: {
     fontFamily: {
