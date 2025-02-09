@@ -6,6 +6,7 @@ import { auth } from '@tern-secure/nextjs/server';
 import Script from 'next/script';
 
 export const experimental_ppr = true;
+export const dynamic = 'force-dynamic'
 
 export default async function Layout({
   children,
