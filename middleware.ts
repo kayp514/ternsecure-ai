@@ -12,11 +12,11 @@ export const config = {
       '/((?!_next|__/auth|__/firebase|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
       '/(api|trpc)(.*)',
     ],
-  } 
+} 
 
 
 export default ternSecureMiddleware(async (auth, request) => {
     if(!publicPaths(request)) {
-        auth.protect()
+      await auth.protect()
     }
 })
