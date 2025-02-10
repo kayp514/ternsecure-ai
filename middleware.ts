@@ -15,7 +15,11 @@ export const config = {
 
 
 export default ternSecureMiddleware(async (auth, request) => {
-    if(!publicPaths(request)) {
-      await auth.protect()
-    }
+  // Skip auth check for public paths
+  if (publicPaths(request)) {
+    return
+  }
+
+  // Protect all other routes
+  return auth.protect()
 })
