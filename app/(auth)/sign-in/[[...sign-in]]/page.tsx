@@ -1,3 +1,5 @@
+'use client'
+
 import { SignIn } from '@tern-secure/nextjs'
 import { ternSecureAuth } from '@tern-secure/nextjs'
 import { verifyDatabaseUser } from '../../../(chat)/actions'
