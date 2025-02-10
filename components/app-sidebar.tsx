@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@tern-secure/nextjs';
+//import type {  } from '@tern-secure/nextjs';
 import { useRouter } from 'next/navigation';
 
 import { PlusIcon } from '@/components/icons';
@@ -18,8 +18,8 @@ import {
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 
-export function AppSidebar() {
-  const { user } = useAuth();
+export function AppSidebar({user} : {user: any}) {
+  //const { user } = useAuth();
   const router = useRouter();
   const { setOpenMobile } = useSidebar();
 
