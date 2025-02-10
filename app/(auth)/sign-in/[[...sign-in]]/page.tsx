@@ -2,7 +2,8 @@
 
 import { SignIn } from '@tern-secure/nextjs'
 import { ternSecureAuth } from '@tern-secure/nextjs'
-import { verifyDatabaseUser } from '../../../(chat)/actions'
+import { verifyDatabaseUser, createDatabaseUser } from '../../../(chat)/actions'
+import type { FirebaseAuthUser } from '@/lib/db/types'
 
 
 
@@ -17,14 +18,41 @@ export default function Page() {
                 throw new Error("No user found after signin")
             }
             
-            const result  = await verifyDatabaseUser(currentUser.uid)
-            console.log("3. Database verification result:", result)
+            const vRes  = await verifyDatabaseUser(currentUser.uid)
+            console.log("3. Database verification result:", vRes)
             
-            if (!result.success) {
-                console.error("Verification failed:", result.error?.message)
-                await ternSecureAuth.signOut()
-                throw new Error(result.error?.message || "Verification failed")
+            if (!vRes.success) {
+                const firebaseUser: FirebaseAuthUser = {
+                    uid: currentUser.uid,
+                    email: currentUser.email!,
+                    displayName: currentUser.displayName || null,
+                    photoURL: currentUser.photoURL || null,
+                    tenantId: currentUser.tenantId || 'default',
+                    emailVerified: currentUser.emailVerified || false,
+                    phoneNumber: currentUser.phoneNumber || null,
+                    metadata: {
+                      creationTime: currentUser.metadata.creationTime,
+                      lastSignInTime: currentUser.metadata.lastSignInTime,
+                    },
+                  }
+
+                console.log("3. User not found in database, creating new user")
+                const createRes = await createDatabaseUser(firebaseUser)
+                console.log("4. Create user result:", createRes)
+
+                if (!createRes.success) {
+                    console.error("5. Failed to create user:", createRes.error)
+                    throw new Error(createRes.error?.message || "Failed to create user record")
+                }
+
+                const reverifyRes =  await verifyDatabaseUser(currentUser.uid)
+                if (!reverifyRes.success) {
+                    console.error("6. Failed to verify user after creation:", reverifyRes.error)
+                    throw new Error(reverifyRes.error?.message || "Failed to verify user after creation")
+                }
             }
+
+        console.log("7. User verified successfully")
         
         } catch (error) {
             console.error("Error in handleOnSuccess:", error)
