@@ -1,5 +1,8 @@
 import { auth } from '@tern-secure/nextjs/server';
 import type { BlockKind } from '@/components/block';
+
+export const runtime = 'dynamic';
+
 import {
   deleteDocumentsByIdAfterTimestamp,
   getDocumentsById,

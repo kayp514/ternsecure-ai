@@ -8,6 +8,8 @@ import { convertToUIMessages } from '@/lib/utils';
 import { DataStreamHandler } from '@/components/data-stream-handler';
 import { DEFAULT_CHAT_MODEL } from '@/lib/ai/models';
 
+export const runtime = 'dynamic';
+
 type VisibilityType = 'private' | 'public';
 
 export default async function Page(props: { params: Promise<{ id: string }> }) {

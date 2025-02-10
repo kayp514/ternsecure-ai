@@ -2,6 +2,8 @@ import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
+export const runtime = 'dynamic';
+
 import { auth } from '@tern-secure/nextjs/server'
 
 // Use Blob instead of File since File is not available in Node.js environment
