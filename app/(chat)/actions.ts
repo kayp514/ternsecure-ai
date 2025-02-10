@@ -7,7 +7,8 @@ import {
   deleteMessagesByChatIdAfterTimestamp,
   getMessageById,
   updateChatVisiblityById,
-  createUser
+  createUser,
+  getUser
 } from '@/lib/db/queries';
 import type { VisibilityType } from '@/components/visibility-selector';
 import { myProvider } from '@/lib/ai/models';
@@ -108,3 +109,50 @@ try {
   }
 }
 }
+
+export async function verifyDatabaseUser(email: string): Promise<SignUpResult> {
+  try {
+    if(!email) {
+      return {
+        success: false,
+        error: {
+          code: 'INVALID_INPUT',
+          message: 'Email is required'
+          },
+        };
+    }
+    const user = await getUser(email);
+
+    if(!user || user.length === 0) {
+      return {
+        success: false,
+        error: {
+          code: 'USER_NOT_FOUND',
+          message: 'User not found'
+        },
+      };
+    }
+
+    const firstUser = user[0];
+
+    return {
+      success: true,
+      user: {
+        uid: firstUser.id,
+        email: firstUser.email,
+        emailVerified: firstUser.emailVerified,
+      },
+    };
+  } catch (error) {
+    console.error('Error in verifyDatabaseUser:', error);
+    return {
+      success: false,
+      error: {
+        code: 'DB_ERROR',
+        message: error instanceof Error ? error.message : 'Failed to verify user in database',
+      },
+    };
+  }
+}
+
+
