@@ -1,9 +1,6 @@
-'use client'
-
 import { SignIn } from '@tern-secure/nextjs'
 import { ternSecureAuth } from '@tern-secure/nextjs'
 import { verifyDatabaseUser } from '../../../(chat)/actions'
-import { getUser } from '@/lib/db/queries'
 
 
 
@@ -16,7 +13,7 @@ export default function Page() {
             throw new Error("No user found after signin")
         }
         
-        const result  = await getUser(currentUser.uid)
+        const result  = await verifyDatabaseUser(currentUser.uid)
 
         if (!result.success) {
             console.error("Verification failed:", result.error?.message)
