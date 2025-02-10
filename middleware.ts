@@ -13,8 +13,8 @@ export const config = {
       '/api/((?!auth).*)',
       '/api/:path*',
       '/:id',
-      '/sign-in',
-      '/sign-up'
+      '/sign-in(.*)',
+      '/sign-up(.*)'
     ]
 };
 
