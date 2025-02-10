@@ -40,7 +40,7 @@ export function ModelSelector({
         )}
       >
         <Button variant="outline" className="md:px-2 md:h-[34px]">
-          {selectedChatModel?.name}
+          {selectedChatModel?.label}
           <ChevronDownIcon />
         </Button>
       </DropdownMenuTrigger>
@@ -63,7 +63,7 @@ export function ModelSelector({
               data-active={id === optimisticModelId}
             >
               <div className="flex flex-col gap-1 items-start">
-                <div>{chatModel.name}</div>
+                <div>{chatModel.label}</div>
                 <div className="text-xs text-muted-foreground">
                   {chatModel.description}
                 </div>

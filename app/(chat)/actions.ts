@@ -57,7 +57,7 @@ export async function updateChatVisibility({
 }
 
 export async function createDatabaseUser(firebaseUser: FirebaseAuthUser): Promise<SignUpResult> {
-  console.log("1. createDatabaseUser received:", JSON.stringify(firebaseUser, null, 2))
+  //console.log("1. createDatabaseUser received:", JSON.stringify(firebaseUser, null, 2))
 
 if (!firebaseUser || typeof firebaseUser !== "object") {
   console.error("2. Invalid input:", firebaseUser)
@@ -81,10 +81,10 @@ try {
       ? new Date(firebaseUser.metadata.lastSignInTime)
       : new Date(),
   }
-  console.log("3. Transformed to DatabaseUserInput:", JSON.stringify(userInput, null, 2))
+  //console.log("3. Transformed to DatabaseUserInput:", JSON.stringify(userInput, null, 2))
 
   const user = await createUser(userInput)
-   console.log("4. Database user created:", JSON.stringify(user, null, 2))
+   //console.log("4. Database user created:", JSON.stringify(user, null, 2))
 
   if (!user) {
       throw new Error("No user returned from database creation")
@@ -99,7 +99,7 @@ try {
     },
   }
 } catch (error) {
-  console.error("5. Error in createDatabaseUser:", error)
+  //console.error("5. Error in createDatabaseUser:", error)
   return {
     success: false,
     error: {
@@ -122,7 +122,6 @@ export async function verifyDatabaseUser(id: string, firebaseUser?: FirebaseAuth
     message: string;}
 }> {
   try {
-    console.log("1. Verifying user in database, id:", id)
 
     if (!id) {
       console.error("2. Invalid id provided:", id)
@@ -135,9 +134,8 @@ export async function verifyDatabaseUser(id: string, firebaseUser?: FirebaseAuth
       }
     }
 
-    console.log("3. Calling getUser")
     const res = await getUser(id)
-    console.log("4. getUser response:", JSON.stringify(res, null, 2))
+    //console.log("4. getUser response:", JSON.stringify(res, null, 2))
 
     if(!res.success) {
       console.log("5. User not found, checking if we can create")
@@ -152,8 +150,6 @@ export async function verifyDatabaseUser(id: string, firebaseUser?: FirebaseAuth
         }
       }
 
-      // Create the user since they don't exist
-      console.log("6. Creating new user")
       const userInput: DatabaseUserInput = {
         id: firebaseUser.uid,
         email: firebaseUser.email,
@@ -166,7 +162,7 @@ export async function verifyDatabaseUser(id: string, firebaseUser?: FirebaseAuth
       }
 
       const createRes = await createUser(userInput)
-      console.log("7. Create result:", createRes)
+      //console.log("7. Create result:", createRes)
 
       if (!createRes) {
         throw new Error("No user returned from database creation")
@@ -182,7 +178,6 @@ export async function verifyDatabaseUser(id: string, firebaseUser?: FirebaseAuth
       }
     }
 
-    console.log("9. User found in database")
     return {
       success: true,
       user: {

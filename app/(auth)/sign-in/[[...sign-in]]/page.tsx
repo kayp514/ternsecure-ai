@@ -10,7 +10,6 @@ export default function Page() {
     const handleOnSuccess = async () => {
         try {
             const currentUser = await ternSecureAuth.currentUser
-            console.log("1. Auth user:", currentUser)
 
             if(!currentUser) {
                 throw new Error("No user found after signin")
@@ -31,14 +30,11 @@ export default function Page() {
               }
             
             const vRes  = await verifyDatabaseUser(currentUser.uid, firebaseUser)
-            console.log("2. Database verification result:", vRes)
             
             if (!vRes.success) {
                 console.error("3. Process failed:", vRes.error)
                 throw new Error(vRes.error?.message || "Verification failed")
             }
-
-            console.log("7. User verified successfully")    
         
         } catch (error) {
             console.error("Error in handleOnSuccess:", error)

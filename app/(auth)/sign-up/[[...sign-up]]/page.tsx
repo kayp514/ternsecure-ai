@@ -39,7 +39,6 @@ export default function Page() {
      //console.log('at sign-up page', firebaseUser)
 
      const result = await createDatabaseUser(firebaseUser)
-     console.log("Database Creation Result:", result)
 
      if (!result.success) {
        throw new Error(result.error?.message || "Failed to create user record")
