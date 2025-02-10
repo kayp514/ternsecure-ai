@@ -122,10 +122,13 @@ export async function verifyDatabaseUser(id: string): Promise<{
     message: string;}
 }> {
   try {
+    console.log("1. Verifying user in database, id:", id)
 
     const res = await getUser(id);
+    console.log("2. Database response:", res)
 
-    if(!res) {
+    if(!res.success || !res.user) {
+      console.log("3. User not found in database")
       return {
         success: false,
         error: {
@@ -135,6 +138,7 @@ export async function verifyDatabaseUser(id: string): Promise<{
       };
     }
 
+    console.log("4. User found in database")
     return {
       success: true,
       user: {
