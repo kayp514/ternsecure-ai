@@ -1155,7 +1155,7 @@ export const LineChartIcon = ({ size = 16 }: { size?: number }) => (
 );
 
 
-export const CoffeeTechLabIcon = ({ size = 24 }) => {
+export const CoffeeTechLabIcon = ({ size = 16 }) => {
   return (
     <svg
       width={size}
