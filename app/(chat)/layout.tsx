@@ -6,17 +6,16 @@ import { auth } from '@tern-secure/nextjs/server';
 import Script from 'next/script';
 
 export const experimental_ppr = true;
-export const dynamic = 'force-dynamic'
 
 export default async function Layout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const [{user}, cookieStore] = await Promise.all([auth(), cookies()]);
+  const [cookieStore] = await Promise.all([cookies()]);
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
 
-  console.log('layout user', user)
+
 
 
   return (
@@ -26,7 +25,7 @@ export default async function Layout({
         strategy="beforeInteractive"
       />
       <SidebarProvider defaultOpen={!isCollapsed}>
-        <AppSidebar user={user} />
+        <AppSidebar />
         <SidebarInset>{children}</SidebarInset>
       </SidebarProvider>
     </>
