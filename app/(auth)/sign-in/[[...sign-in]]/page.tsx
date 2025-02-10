@@ -3,6 +3,8 @@
 import { SignIn } from '@tern-secure/nextjs'
 import { ternSecureAuth } from '@tern-secure/nextjs'
 import { verifyDatabaseUser } from '../../../(chat)/actions'
+import { getUser } from '@/lib/db/queries'
+
 
 
 export default function Page() {
@@ -13,13 +15,8 @@ export default function Page() {
         if(!currentUser) {
             throw new Error("No user found after signin")
         }
-
-        if (!currentUser.email) {
-            await ternSecureAuth.signOut()
-            throw new Error("No email found for user")
-        }
         
-        const result  = await verifyDatabaseUser(currentUser.email)
+        const result  = await getUser(currentUser.uid)
 
         if (!result.success) {
             console.error("Verification failed:", result.error?.message)

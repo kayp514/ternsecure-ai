@@ -5,14 +5,39 @@ import type { Message, Suggestion } from '@prisma/client';
 import type { DatabaseUserInput } from './types';
 
 
-export async function getUser(email: string) {
+export async function getUser(id: string) {
   try {
-    return await prisma.user.findMany({
-      where: { email },
-    });
+    const dbUser = await prisma.user.findUnique({
+      where: { id },
+      select : {
+        id: true,
+        email: true,
+        emailVerified: true,
+      }
+    })
+
+    if (!dbUser) {
+      return {
+        success: false,
+        error: {
+          code: 'USER_NOT_FOUND',
+          message: 'User not found'
+        },
+      }
+    }
+    return {
+      success: true,
+      user: dbUser
+    }
   } catch (error) {
-    console.error('Failed to get user from database');
-    throw error;
+    console.error('Failed to get user from database', error);
+    return {
+      success: false,
+      error: {
+        code: 'DB_ERROR',
+        message: error instanceof Error ? error.message : 'Failed to get user from database'
+      }
+    }
   }
 }
 

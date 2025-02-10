@@ -110,29 +110,22 @@ try {
 }
 }
 
-export async function verifyDatabaseUser(email: string): Promise<{
+export async function verifyDatabaseUser(id: string): Promise<{
   success: boolean;
   user?: {
-    uid: string;
-    email: string;
-    emailVerified: boolean;}
+    id: string;
+    email: string | null;
+    emailVerified: boolean | null;
+  }
   error?: {
     code: string;
     message: string;}
 }> {
   try {
-    if(!email) {
-      return {
-        success: false,
-        error: {
-          code: 'INVALID_INPUT',
-          message: 'Email is required'
-          },
-        };
-    }
-    const user = await getUser(email);
 
-    if(!user || user.length === 0) {
+    const res = await getUser(id);
+
+    if(!res) {
       return {
         success: false,
         error: {
@@ -142,14 +135,12 @@ export async function verifyDatabaseUser(email: string): Promise<{
       };
     }
 
-    const firstUser = user[0];
-
     return {
       success: true,
       user: {
-        uid: firstUser.id,
-        email: firstUser.email,
-        emailVerified: firstUser.emailVerified,
+        id: res.user?.id ?? '',
+        email: res.user?.email || null,
+        emailVerified: res.user?.emailVerified || null,
       },
     };
   } catch (error) {
