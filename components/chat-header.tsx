@@ -70,6 +70,7 @@ function PureChatHeader({
         asChild
       >
           <CoffeeTechLabIcon size={16} />
+          CoffeeTechLab
       </Button>
 
     </header>
