@@ -58,7 +58,7 @@ export default async function RootLayout({
         />
       </head>
       <body className="antialiased">
-        <TernSecureProvider requiresVerification={false}>
+        <TernSecureProvider requiresVerification={true}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
