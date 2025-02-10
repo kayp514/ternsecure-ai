@@ -1,7 +1,6 @@
 import { ternSecureMiddleware, createRouteMatcher } from '@tern-secure/nextjs/server'
 
-
-export const runtime = 'experimental-edge'
+//export const runtime = 'experimental-edge'
 
 const publicPaths = createRouteMatcher(['/sign-in(.*)', '/sign-up(.*)'])
 
