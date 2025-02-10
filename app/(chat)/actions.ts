@@ -88,7 +88,7 @@ try {
 
   if (!user) {
       throw new Error("No user returned from database creation")
-    }
+  }
 
   return {
     success: true,
@@ -110,7 +110,7 @@ try {
 }
 }
 
-export async function verifyDatabaseUser(id: string): Promise<{
+export async function verifyDatabaseUser(id: string, firebaseUser?: FirebaseAuthUser): Promise<{
   success: boolean;
   user?: {
     id: string;
@@ -124,21 +124,65 @@ export async function verifyDatabaseUser(id: string): Promise<{
   try {
     console.log("1. Verifying user in database, id:", id)
 
-    const res = await getUser(id);
-    console.log("2. Database response:", res)
-
-    if(!res.success || !res.user) {
-      console.log("3. User not found in database")
+    if (!id) {
+      console.error("2. Invalid id provided:", id)
       return {
         success: false,
         error: {
-          code: 'USER_NOT_FOUND',
-          message: 'User not found'
+          code: 'INVALID_INPUT',
+          message: 'Invalid user ID'
         },
-      };
+      }
     }
 
-    console.log("4. User found in database")
+    console.log("3. Calling getUser")
+    const res = await getUser(id)
+    console.log("4. getUser response:", JSON.stringify(res, null, 2))
+
+    if(!res.success) {
+      console.log("5. User not found, checking if we can create")
+
+      if (!firebaseUser?.email) {
+        return {
+          success: false,
+          error: {
+            code: 'USER_NOT_FOUND',
+            message: 'User not found and no auth data provided'
+          }
+        }
+      }
+
+      // Create the user since they don't exist
+      console.log("6. Creating new user")
+      const userInput: DatabaseUserInput = {
+        id: firebaseUser.uid,
+        email: firebaseUser.email,
+        avatar: firebaseUser.photoURL ?? null,
+        emailVerified: firebaseUser.emailVerified ?? false,
+        createdAt: firebaseUser.metadata.creationTime ? new Date(firebaseUser.metadata.creationTime) : new Date(),
+        lastSignInAt: firebaseUser.metadata.lastSignInTime 
+          ? new Date(firebaseUser.metadata.lastSignInTime)
+          : new Date(),
+      }
+
+      const createRes = await createUser(userInput)
+      console.log("7. Create result:", createRes)
+
+      if (!createRes) {
+        throw new Error("No user returned from database creation")
+      }
+
+      return {
+        success: true,
+        user: {
+          id: createRes.id,
+          email: createRes.email,
+          emailVerified: createRes.emailVerified,
+        }
+      }
+    }
+
+    console.log("9. User found in database")
     return {
       success: true,
       user: {
@@ -146,7 +190,8 @@ export async function verifyDatabaseUser(id: string): Promise<{
         email: res.user?.email || null,
         emailVerified: res.user?.emailVerified || null,
       },
-    };
+    }
+    
   } catch (error) {
     console.error('Error in verifyDatabaseUser:', error);
     return {

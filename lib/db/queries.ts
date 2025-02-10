@@ -6,7 +6,9 @@ import type { DatabaseUserInput } from './types';
 
 
 export async function getUser(id: string) {
+  console.log("1. getUser called with id:", id)
   try {
+    console.log("2. Attempting prisma.user.findUnique")
     const dbUser = await prisma.user.findUnique({
       where: { id },
       select : {
@@ -15,8 +17,10 @@ export async function getUser(id: string) {
         emailVerified: true,
       }
     })
+    console.log("3. prisma query result:", dbUser)
 
     if (!dbUser) {
+      console.log("4. No user found in database")
       return {
         success: false,
         error: {
@@ -25,12 +29,19 @@ export async function getUser(id: string) {
         },
       }
     }
+    console.log("5. User found, returning success")
     return {
       success: true,
       user: dbUser
     }
   } catch (error) {
-    console.error('Failed to get user from database', error);
+    console.error('6. Error in getUser:', error)
+    console.error('6a. Full error details:', {
+      name: error,
+      message: error,
+      stack: error,
+      ...(error || {})
+    })
     return {
       success: false,
       error: {
