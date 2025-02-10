@@ -1,6 +1,8 @@
 import { auth } from '@tern-secure/nextjs/server';
 import { getSuggestionsByDocumentId } from '@/lib/db/queries';
 
+export const runtime = 'nodejs';
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const documentId = searchParams.get('documentId');

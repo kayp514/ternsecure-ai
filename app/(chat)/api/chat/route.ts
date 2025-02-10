@@ -26,7 +26,7 @@ import { updateDocument } from '@/lib/ai/tools/update-document';
 import { requestSuggestions } from '@/lib/ai/tools/request-suggestions';
 import { getWeather } from '@/lib/ai/tools/get-weather';
 
-export const runtime = 'dynamic';
+export const runtime = 'nodejs';
 
 export const maxDuration = 60;
 

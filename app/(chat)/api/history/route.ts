@@ -1,7 +1,7 @@
 import { auth } from '@tern-secure/nextjs/server';
 import { getChatsByUserId } from '@/lib/db/queries';
 
-export const runtime = 'dynamic';
+export const runtime = 'nodejs';
 
 export async function GET() {
   const session = await auth();
