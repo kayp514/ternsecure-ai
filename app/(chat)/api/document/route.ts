@@ -1,8 +1,5 @@
 import { auth } from '@tern-secure/nextjs/server';
 import type { BlockKind } from '@/components/block';
-
-export const runtime = 'nodejs';
-
 import {
   deleteDocumentsByIdAfterTimestamp,
   getDocumentsById,

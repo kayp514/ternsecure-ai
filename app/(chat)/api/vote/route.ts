@@ -1,7 +1,6 @@
 import { auth } from '@tern-secure/nextjs/server';
 import { getVotesByChatId, voteMessage } from '@/lib/db/queries';
 
-export const runtime = 'nodejs';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
