@@ -15,6 +15,7 @@ export default function Page() {
         }
 
         if (!currentUser.email) {
+            await ternSecureAuth.signOut()
             throw new Error("No email found for user")
         }
         

@@ -110,7 +110,16 @@ try {
 }
 }
 
-export async function verifyDatabaseUser(email: string): Promise<SignUpResult> {
+export async function verifyDatabaseUser(email: string): Promise<{
+  success: boolean;
+  user?: {
+    uid: string;
+    email: string;
+    emailVerified: boolean;}
+  error?: {
+    code: string;
+    message: string;}
+}> {
   try {
     if(!email) {
       return {
