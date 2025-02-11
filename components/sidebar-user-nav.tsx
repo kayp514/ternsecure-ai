@@ -1,5 +1,5 @@
 'use client';
-import { ChevronUp } from 'lucide-react';
+import { ChevronUp, LogOut } from 'lucide-react';
 import Image from 'next/image';
 import { useAuth } from '@tern-secure/nextjs';
 import { SignOut } from '@tern-secure/nextjs';
@@ -52,8 +52,9 @@ export function SidebarUserNav() {
               {`Toggle ${theme === 'light' ? 'dark' : 'light'} mode`}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <SignOut />
+            <DropdownMenuItem>
+            <LogOut className="mr-2 h-4 w-4" />
+            <SignOut />
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

@@ -5,7 +5,7 @@ import { useWindowSize } from 'usehooks-ts';
 import { ModelSelector } from '@/components/model-selector';
 import { SidebarToggle } from '@/components/sidebar-toggle';
 import { Button } from '@/components/ui/button';
-import { CoffeeTechLabIcon, PlusIcon, } from './icons';
+import { CoffeeTechICon, PlusIcon, } from './icons';
 import { useSidebar } from './ui/sidebar';
 import { memo } from 'react';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
@@ -64,7 +64,12 @@ function PureChatHeader({
           className="order-1 md:order-3"
         />
       )}
-
+      
+      <div
+        className=" text-zinc-50 dark:text-zinc-900 hidden md:flex py-1.5 px-2 h-fit md:h-[34px] order-4 md:ml-auto"
+      >
+        <CoffeeTechICon size={32} />
+      </div>
     </header>
   );
 }
