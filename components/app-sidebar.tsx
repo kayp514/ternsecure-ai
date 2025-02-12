@@ -2,7 +2,6 @@
 
 import { useAuth } from '@tern-secure/nextjs';
 import { useRouter } from 'next/navigation';
-
 import { PlusIcon } from '@/components/icons';
 import { SidebarHistory } from '@/components/sidebar-history';
 import { SidebarUserNav } from '@/components/sidebar-user-nav';
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
+
 
 export function AppSidebar() {
   const { user } = useAuth();

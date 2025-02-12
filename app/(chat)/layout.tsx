@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 
 import { AppSidebar } from '@/components/app-sidebar';
+import { getUser } from "@tern-secure/nextjs/server"
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import Script from 'next/script';
 
@@ -13,9 +14,13 @@ export default async function Layout({
 }) {
   const [cookieStore] = await Promise.all([cookies()]);
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
+  //const { user } = await auth();
+  const  user  =  await getUser()
+  console.log('chat layout', user)
 
-
-
+  if(!user) {
+    return null
+  }
 
   return (
     <>
