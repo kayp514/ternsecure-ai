@@ -34,8 +34,14 @@ interface ChatModel {
 export const chatModels: Array<ChatModel> = [
   {
     id: 'chat-model-small',
-    label: 'GPT 4o mini',
+    label: 'GPT-4o-mini',
     name: 'Small model',
     description: 'Small model for fast, lightweight tasks',
+  },
+  {
+    id: 'chat-model-large',
+    label: 'GPT-4o',
+    name: 'Large model',
+    description: 'Large model for complex, multi-step tasks',
   },
 ];
