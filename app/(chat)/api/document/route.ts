@@ -1,5 +1,5 @@
 import { auth } from '@tern-secure/nextjs/server';
-import type { BlockKind } from '@/components/block';
+import type { ArtifactKind } from '@/components/artifact';
 import {
   deleteDocumentsByIdAfterTimestamp,
   getDocumentsById,
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
     content,
     title,
     kind,
-  }: { content: string; title: string; kind: BlockKind } = await request.json();
+  }: { content: string; title: string; kind: ArtifactKind } = await request.json();
 
   if (session.user?.uid) {
     const document = await saveDocument({
