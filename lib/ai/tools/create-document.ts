@@ -2,7 +2,7 @@ import { generateUUID } from '@/lib/utils';
 import { type DataStreamWriter, tool } from 'ai';
 import { z } from 'zod';
 import type { AuthResult } from '@tern-secure/nextjs/server';
-import { blockKinds, documentHandlersByBlockKind } from '@/lib/blocks/server';
+import { artifactKinds, documentHandlersByArtifactKind } from '@/lib/artifacts/server';
 
 
 interface CreateDocumentProps {
@@ -16,7 +16,7 @@ export const createDocument = ({ session, dataStream }: CreateDocumentProps) =>
       'Create a document for a writing or content creation activities. This tool will call other functions that will generate the contents of the document based on the title and kind.',
     parameters: z.object({
       title: z.string(),
-      kind: z.enum(blockKinds),
+      kind: z.enum(artifactKinds),
     }),
     execute: async ({ title, kind }) => {
       const id = generateUUID();
@@ -41,9 +41,9 @@ export const createDocument = ({ session, dataStream }: CreateDocumentProps) =>
         content: '',
       });
 
-      const documentHandler = documentHandlersByBlockKind.find(
-        (documentHandlerByBlockKind) =>
-          documentHandlerByBlockKind.kind === kind,
+      const documentHandler = documentHandlersByArtifactKind.find(
+        (documentHandlerByArtifactKind) =>
+          documentHandlerByArtifactKind.kind === kind,
       );
 
       if (!documentHandler) {

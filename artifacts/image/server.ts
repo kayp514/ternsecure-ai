@@ -1,11 +1,11 @@
 import { myProvider } from '@/lib/ai/models';
-import { createDocumentHandler } from '@/lib/blocks/server';
+import { createDocumentHandler } from '@/lib/artifacts/server';
 import { saveDocument } from '@/lib/db/queries';
 import { experimental_generateImage } from 'ai';
 
 export const imageDocumentHandler = createDocumentHandler<'image'>({
   kind: 'image',
-  onCreateDocument: async ({ id, title, dataStream, session }) => {
+  onCreateDocument: async ({ title, dataStream}) => {
     let draftContent = '';
 
     const { image } = await experimental_generateImage({
@@ -21,23 +21,13 @@ export const imageDocumentHandler = createDocumentHandler<'image'>({
       content: image.base64,
     });
 
-    if (session?.user?.uid) {
-      await saveDocument({
-        id,
-        title,
-        kind: 'image',
-        content: draftContent,
-        userId: session.user.uid,
-      });
-    }
-
     return draftContent;
   },
   onUpdateDocument: async ({ description, dataStream }) => {
     let draftContent = '';
 
     const { image } = await experimental_generateImage({
-      model: myProvider.imageModel('image-model'),
+      model: myProvider.imageModel('small-model'),
       prompt: description,
       n: 1,
     });

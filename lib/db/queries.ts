@@ -1,6 +1,6 @@
 import 'server-only';
 import { prisma } from '../prisma';
-import type { BlockKind } from '@/components/block';
+import type { ArtifactKind } from '@/components/artifact';
 import type { Message, Suggestion } from '@prisma/client';
 import type { DatabaseUserInput } from './types';
 
@@ -252,7 +252,7 @@ export async function saveDocument({
 }: {
   id: string;
   title: string;
-  kind: BlockKind;
+  kind: ArtifactKind;
   content: string;
   userId: string;
 }) {

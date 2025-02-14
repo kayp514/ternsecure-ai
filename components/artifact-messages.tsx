@@ -4,7 +4,7 @@ import type { Vote } from '@prisma/client';
 import type { ChatRequestOptions, Message } from 'ai';
 import { memo } from 'react';
 import equal from 'fast-deep-equal';
-import type { UIBlock } from './block';
+import type { UIArtifact } from './artifact';
 
 interface BlockMessagesProps {
   chatId: string;
@@ -18,10 +18,10 @@ interface BlockMessagesProps {
     chatRequestOptions?: ChatRequestOptions,
   ) => Promise<string | null | undefined>;
   isReadonly: boolean;
-  blockStatus: UIBlock['status'];
+  artifactStatus: UIArtifact['status'];
 }
 
-function PureBlockMessages({
+function PureArtifactMessages({
   chatId,
   isLoading,
   votes,
@@ -68,8 +68,8 @@ function areEqual(
   nextProps: BlockMessagesProps,
 ) {
   if (
-    prevProps.blockStatus === 'streaming' &&
-    nextProps.blockStatus === 'streaming'
+    prevProps.artifactStatus === 'streaming' &&
+    nextProps.artifactStatus === 'streaming'
   )
     return true;
 
@@ -81,4 +81,4 @@ function areEqual(
   return true;
 }
 
-export const BlockMessages = memo(PureBlockMessages, areEqual);
+export const ArtifactMessages = memo(PureArtifactMessages, areEqual);

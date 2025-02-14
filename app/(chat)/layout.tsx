@@ -1,5 +1,5 @@
 import { cookies } from 'next/headers';
-
+import { auth } from '@tern-secure/nextjs/server';
 import { AppSidebar } from '@/components/app-sidebar';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import Script from 'next/script';
@@ -13,8 +13,12 @@ export default async function Layout({
 }) {
   const [cookieStore] = await Promise.all([cookies()]);
   const isCollapsed = cookieStore.get('sidebar:state')?.value !== 'true';
+  const { user }  = await auth();
+  console.log(user)
 
-
+  if(!user) {
+    return null
+  }
 
 
   return (

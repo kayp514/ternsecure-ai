@@ -9,11 +9,11 @@ import { ChatHeader } from '@/components/chat-header';
 import type { Vote } from '@prisma/client';
 import { fetcher, generateUUID } from '@/lib/utils';
 
-import { Block } from './block';
+import { Artifact } from './artifact';
 import { MultimodalInput } from './multimodal-input';
 import { Messages } from './messages';
 import type { VisibilityType } from './visibility-selector';
-import { useBlockSelector } from '@/hooks/use-block';
+import { useArtifactSelector } from '@/hooks/use-artifact';
 import { toast } from 'sonner';
 
 export function Chat({
@@ -63,7 +63,7 @@ export function Chat({
   );
 
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
-  const isBlockVisible = useBlockSelector((state) => state.isVisible);
+  const isArtifactVisible = useArtifactSelector((state) => state.isVisible);
 
   return (
     <>
@@ -83,7 +83,7 @@ export function Chat({
           setMessages={setMessages}
           reload={reload}
           isReadonly={isReadonly}
-          isBlockVisible={isBlockVisible}
+          isArtifactVisible={isArtifactVisible}
         />
 
         <form className="flex mx-auto px-4 bg-background pb-4 md:pb-6 gap-2 w-full md:max-w-3xl">
@@ -105,7 +105,7 @@ export function Chat({
         </form>
       </div>
 
-      <Block
+      <Artifact
         chatId={id}
         input={input}
         setInput={setInput}
